@@ -80,8 +80,8 @@ for server in "${!servers[@]}"; do
             [[ "$2" == "353" ]] && echo $(echo ${REPLY} | /bin/cut -d':' -f3 | /bin/sed 's/@//' | /bin/sed "s/${nickname} //") > "${prefix}/${server}_${channel#\#}.names"
 
             read -r who did where what <<< "${REPLY%}"
-            {  [[ "${did}" == "PART" ]] && what=':!PART'; } || \
-            {  [[ "${did}" == "JOIN" ]] && what=':!JOIN'; } || \
+            {  [[ "${did}" == "PART" ]] && what=:"${symbol}"PART; } || \
+            {  [[ "${did}" == "JOIN" ]] && what=:"${symbol}"JOIN; } || \
                [[ "${did}" == "PRIVMSG" ]] || continue
 
             printf -- "%s\n" "${REPLY}" >> "${prefix}/${server}_${where#*\#}_$(date +"%F").log"
