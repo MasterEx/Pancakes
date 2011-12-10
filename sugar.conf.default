@@ -1,0 +1,37 @@
+# settings
+# --------
+# this should be a correct bash file
+# try: bash -n sugar.conf
+# to check if your syntax is correct
+
+# where to create the logs and communication pipes
+prefix="$HOME/irc"
+
+# command preffix
+#symbol="@"
+
+# user ident
+#nickname="pancakes"
+#realname="cookiebot"
+#passwd="secret"
+#mode="+i"
+
+# machine ident
+#hostname="cookiebox"
+#servername="biscuit"
+
+# network server port
+#port="6667"
+
+# networks and channels
+# ---------------------
+# you need at least one server and
+# channel to have the bot connected
+#
+#servers=(
+#   [irc.freenode.net]="#woof #mew #oink"
+#   [gr.irc.gr]="#foobar #choco #riots"
+#)
+servers=(
+    [irc.freenode.net]="#foss-aueb"
+)

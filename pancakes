@@ -19,6 +19,7 @@ declare -A allnames
 }
 
 : "${prefix:="${HOME}/irc"}"
+: "${symbol:=\!}"
 : "${nickname:=pancakes}"
 : "${realname:=cookiebot}"
 : "${mode:=+iw}"
@@ -85,8 +86,8 @@ for server in "${!servers[@]}"; do
 
             printf -- "%s\n" "${REPLY}" >> "${prefix}/${server}_${where#*\#}_$(date +"%F").log"
 
-            [[ "${who%\!*}" != ":${nickname}" && "${what}" =~ ^:\! ]] || continue
-            exec "${donuts}" "${what#:\!}" "${where#:}" "${who#:}" "${nickname}" "${server}" "${prefix}" | /bin/cut -c -255 >&${ircfd} &
+            [[ "${who%\!*}" != ":${nickname}" && "${what}" =~ ^:"${symbol}" ]] || continue
+            exec "${donuts}" "${what#:$symbol}" "${where#:}" "${who#:}" "${nickname}" "${server}" "${prefix}" | /bin/cut -c -255 >&${ircfd} &
         done
     } &
     
