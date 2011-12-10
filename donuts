@@ -4,7 +4,9 @@ what="$1"
 where="$2"
 who="${3%\!*}"
 whoami="$4"
-op="c00kiemon5ter"
+server="$5"
+prefix="$6"
+op="Master_ex"
 
 sayit() {
     printf -- "PRIVMSG %s :%s %s\n" "${where}" "${newho:-${who}}" "$*"
@@ -126,6 +128,17 @@ case "${what}" in
         (( ${#args[@]} )) && who= sayit "${args[RANDOM%${#args[@]}]}" \
                           || sayit "oh, this hurts bro, I cant rhyme with yo word'"
         ;;
+    names)
+		[[ "${who}" == "${op}" ]] \
+			&& printf -- "NAMES %s \n" "${where}" \
+			|| sayit "You are not my master!"			
+		;;
+	all)
+		names=$(cat "${prefix}/${server}_${where#\#}.names")
+		who=""
+		newho=""
+		sayit "${args} $names"
+		;;
     [[:alnum:]]*)
         newho="" sayit "you don't know what you're talking about, do you?"
         ;;

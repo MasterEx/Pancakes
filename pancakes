@@ -86,8 +86,16 @@ for server in "${!servers[@]}"; do
             printf -- "%s\n" "${REPLY}" >> "${prefix}/${server}_${where#*\#}_$(date +"%F").log"
 
             [[ "${who%\!*}" != ":${nickname}" && "${what}" =~ ^:\! ]] || continue
-            exec "${donuts}" "${what#:\!}" "${where#:}" "${who#:}" "${nickname}" | /bin/cut -c -255 >&${ircfd} &
+            exec "${donuts}" "${what#:\!}" "${where#:}" "${who#:}" "${nickname}" "${server}" "${prefix}" | /bin/cut -c -255 >&${ircfd} &
         done
     } &
+    
+    
+    {
+		while true; do
+			printf -- "NAMES %s \n" "${channel}" >&${ircfd}
+			sleep 60
+		done
+	} &
 done
 
