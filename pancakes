@@ -7,6 +7,7 @@ donuts="${path}/donuts"
 arg0="$1"
 
 declare -A servers
+declare -A allnames
 
 [[ -r "${sugar}" ]] && source "${sugar}" ||  {
     printf -- "error: cannot read configuration: %s\n" "${sugar}"
@@ -54,7 +55,7 @@ for server in "${!servers[@]}"; do
 
         {   exec {fffd}<>"${fifo}"
 
-            trap 'exec {fffd}>&-; /bin/rm -f "${fifo}";' EXIT
+            trap 'exec {fffd}>&-; /bin/rm -f "${fifo}"; /bin/rm "${prefix}/${server}_${channel#\#}.names"' EXIT
 
             printf -- "ACTION %s\n" "Heya peoples :]" >&${fffd}
 
@@ -72,7 +73,10 @@ for server in "${!servers[@]}"; do
         while read -r -u ${ircfd}; do
             set -- ${REPLY//$'\r'/}
             [[ "$arg0" == "debug" ]] && echo "${REPLY}"
+
             [[ "$1" == "PING" ]] && printf -- "PONG %s\n" "$2" >&${ircfd} && continue
+            
+            [[ "$2" == "353" ]] && echo $(echo ${REPLY} | /bin/cut -d':' -f3 | /bin/sed 's/@//' | /bin/sed "s/${nickname} //") > "${prefix}/${server}_${channel#\#}.names"
 
             read -r who did where what <<< "${REPLY%}"
             {  [[ "${did}" == "PART" ]] && what=':!PART'; } || \
