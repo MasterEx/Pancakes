@@ -4,6 +4,7 @@
 path="$(dirname "$0")"
 sugar="${path}/sugar.conf"
 donuts="${path}/donuts"
+arg0="$1"
 
 declare -A servers
 
@@ -70,6 +71,7 @@ for server in "${!servers[@]}"; do
 
         while read -r -u ${ircfd}; do
             set -- ${REPLY//$'\r'/}
+            [[ "$arg0" == "debug" ]] && echo "${REPLY}"
             [[ "$1" == "PING" ]] && printf -- "PONG %s\n" "$2" >&${ircfd} && continue
 
             read -r who did where what <<< "${REPLY%}"
